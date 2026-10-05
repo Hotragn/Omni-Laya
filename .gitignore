@@ -1,0 +1,20 @@
+node_modules
+dist
+dist-local
+.output
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+src/routeTree.gen.ts
+
+# Planning notes, research and design working files (kept out of git)
+.notes/
+
+# Server keys written by deploy/server/setup.sh (never commit)
+deploy/server/.env
+omnilaya-secrets.env

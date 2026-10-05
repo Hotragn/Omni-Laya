@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4eee3" />
+    <title>OmniLaya Search: search that runs on your device</title>
+    <meta
+      name="description"
+      content="Open-source web search where Laya, a small decision model, runs in your browser to pick the sources and rank every result. No server, no account, no generated answers."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="OmniLaya Search" />
+    <meta property="og:title" content="OmniLaya Search: search that runs on your device" />
+    <meta property="og:description" content="Laya picks where to search and ranks every result in your browser. Every score in the open." />
+    <meta property="og:image" content="og-home.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Literata:opsz,wght@7..72,400;7..72,500&family=Hanken+Grotesk:wght@400;500;600&family=Recursive:wght,CASL,MONO@400..600,0..1,0..1&display=swap"
+    />
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let theme;
+        try { theme = localStorage.getItem('omnilaya-theme'); } catch {}
+        if (theme === 'light' || theme === 'dark') root.dataset.theme = theme;
+        const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        root.classList.toggle('dark', dark);
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#15140f' : '#f4eee3');
+      })();
+    </script>
+  </head>
+  <body class="min-h-dvh">
+    <div id="root"></div>
+    <noscript>OmniLaya runs Laya in your browser, so it needs JavaScript.</noscript>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

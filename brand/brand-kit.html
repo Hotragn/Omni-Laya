@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OmniLaya brand kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..600,50;1,9..144,400,50&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+  :root { --paper: #f4eee3; --card: #fbf8f2; --ink: #1b1a17; --ink-2: #3a372f; --muted: #6b665c; --rule: #ddd3c2; --night: #171613; --night-ink: #efe8dc; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 Geist, system-ui, sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 56px 40px 80px; }
+  .display { font-family: Fraunces, Georgia, serif; font-weight: 500; font-variation-settings: 'SOFT' 50; letter-spacing: -0.02em; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; }
+  .muted { color: var(--muted); }
+  h1 { margin: 0; font-size: 56px; line-height: 1; }
+  h1 em { font-weight: 400; color: var(--muted); }
+  h2 { margin: 0 0 16px; font: 500 12px/1 'Geist Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  section { padding: 40px 0; border-top: 1px dashed var(--rule); }
+  .row { display: grid; gap: 24px; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .tile { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 24px; }
+  .tile.night { background: var(--night); color: var(--night-ink); border-color: #34312a; }
+  .center { display: grid; place-items: center; }
+  .swatch { border-radius: 14px; height: 96px; border: 1px solid var(--rule); }
+  .cap { margin-top: 8px; }
+  .wash-demo { position: relative; overflow: hidden; height: 220px; }
+  .wash-demo img.w { position: absolute; left: 50%; top: 50%; width: 900px; transform: translate(-50%, -50%); opacity: 0.12; }
+  .meter { display: inline-block; width: 48px; height: 3px; border-radius: 99px; background: rgba(27,26,23,.12); position: relative; vertical-align: middle; }
+  .meter i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: rgba(27,26,23,.75); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid rgba(27,26,23,.6); background: var(--card); font-size: 14px; }
+  .chip.off { border: 1px dashed #cfc4b1; background: transparent; color: var(--muted); }
+  a.link { color: #1d44a8; font-size: 18px; text-decoration: none; }
+  a.visited { color: #6b2d95; }
+  ul.rules { margin: 0; padding-left: 18px; }
+  ul.rules li { margin: 4px 0; }
+  .no { color: #b3261e; }
+</style>
+</head>
+<body>
+<main>
+  <div style="display:flex; align-items:center; gap:20px">
+    <img src="logo/mark-wash.svg" width="84" height="84" alt="">
+    <div>
+      <h1 class="display">OmniLaya <em>Search</em></h1>
+      <p class="muted" style="margin:10px 0 0">Brand kit. Cream paper, black ink, one watercolor wash.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2>Mark</h2>
+    <div class="row cols-4">
+      <div class="tile center" style="height:220px"><img src="logo/mark-wash.svg" width="150" alt="Watercolor mark"></div>
+      <div class="tile night center" style="height:220px"><img src="logo/mark-wash-on-night.svg" width="150" alt="Watercolor mark on night"></div>
+      <div class="tile center" style="height:220px"><img src="logo/mark-flat.svg" width="96" alt="Flat mark"></div>
+      <div class="tile center" style="height:220px; gap:18px; grid-auto-flow:column"><img src="logo/favicon.svg" width="32" alt=""><img src="logo/favicon.svg" width="16" alt=""><img src="logo/icon.svg" width="72" style="border-radius:16px" alt=""></div>
+    </div>
+    <p class="muted cap">An open ring painted in one brush stroke, with an ink drop inside. The ring is the whole web (omni); the drop is the one point where Laya decides. Use the watercolor mark at 48px and up, the flat mark below that. Keep clear space of half the mark's width on every side.</p>
+  </section>
+
+  <section>
+    <h2>Lockup</h2>
+    <div class="row cols-2">
+      <div class="tile center" style="height:160px"><img src="logo/lockup.svg" width="440" alt="OmniLaya Search lockup"></div>
+      <div class="tile night center" style="height:160px"><img src="logo/lockup-on-night.svg" width="440" alt="OmniLaya Search lockup on night"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Colour</h2>
+    <div class="row cols-4">
+      <div><div class="swatch" style="background:#f4eee3"></div><div class="cap"><b>Paper</b> <span class="mono muted">#F4EEE3</span><br><span class="muted">Page background</span></div></div>
+      <div><div class="swatch" style="background:#fbf8f2"></div><div class="cap"><b>Sheet</b> <span class="mono muted">#FBF8F2</span><br><span class="muted">Search box, chosen chips</span></div></div>
+      <div><div class="swatch" style="background:#1b1a17"></div><div class="cap"><b>Ink</b> <span class="mono muted">#1B1A17</span><br><span class="muted">Text, mark, primary button</span></div></div>
+      <div><div class="swatch" style="background:#6b665c"></div><div class="cap"><b>Diluted ink</b> <span class="mono muted">#6B665C</span><br><span class="muted">Secondary text, 4.8:1 on paper</span></div></div>
+      <div><div class="swatch" style="background:#ddd3c2"></div><div class="cap"><b>Rule</b> <span class="mono muted">#DDD3C2</span><br><span class="muted">Dashed separators, borders</span></div></div>
+      <div><div class="swatch" style="background:#171613"></div><div class="cap"><b>Night</b> <span class="mono muted">#171613</span><br><span class="muted">Dark theme background</span></div></div>
+      <div><div class="swatch" style="background:#efe8dc"></div><div class="cap"><b>Night ink</b> <span class="mono muted">#EFE8DC</span><br><span class="muted">Dark theme text and mark</span></div></div>
+      <div><div class="swatch" style="background:linear-gradient(90deg,#1d44a8 50%,#6b2d95 50%)"></div><div class="cap"><b>Links</b> <span class="mono muted">#1D44A8 / #6B2D95</span><br><span class="muted">Result links only, before and after a visit</span></div></div>
+    </div>
+    <p class="muted cap">The brand has no hue of its own. Blue and purple exist only so people recognise result links, and red only for errors (#B3261E). Never use a link colour for a brand element.</p>
+  </section>
+
+  <section>
+    <h2>Type</h2>
+    <div class="row cols-3">
+      <div class="tile"><div class="display" style="font-size:44px; line-height:1.05">Fraunces</div><p class="muted">Display. The wordmark and the home headline only. Weight 500, italic 400 for "Search". Soft axis at 50.</p></div>
+      <div class="tile"><div style="font-size:36px; font-weight:500; line-height:1.1">Geist</div><p class="muted">Interface and reading. Everything a person operates or reads: box, chips, results, footer. 400 and 500.</p></div>
+      <div class="tile"><div class="mono" style="font-size:28px; line-height:1.2">Geist Mono</div><p class="muted">Laya's readouts only: percentages, checkpoint, the query sent, "Laya chose". Never decoration.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Interface voice</h2>
+    <div class="row cols-2">
+      <div class="tile">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <span class="mono muted">Laya chose</span>
+          <span class="chip">Past month</span>
+          <span class="chip">Google <span class="mono muted">6</span></span>
+          <span class="chip">Hacker News <span class="mono muted">2</span></span>
+          <span class="chip off">+ more</span>
+        </div>
+        <div style="margin-top:22px">
+          <div class="muted" style="font-size:12px">github.com/tokio-rs/tokio · 2d ago</div>
+          <a class="link" href="#">tokio-rs/tokio: A runtime for writing reliable asynchronous applications</a>
+          <div class="muted" style="font-size:14px">Provides I/O, networking, scheduling and timers for async Rust programs.</div>
+          <div style="margin-top:6px"><span class="meter"><i style="width:63%"></i></span> <span class="mono">63% on topic</span></div>
+        </div>
+      </div>
+      <div class="tile wash-demo"><img class="w" src="../public/wash.webp" alt=""><div style="position:relative"><b>The wash</b><p class="muted">One watercolor bloom behind the home search box, at 9% opacity (7% at night, inverted). Nowhere else. Texture belongs to the mark and this wash; everything behind text stays flat.</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <div class="row cols-2">
+      <ul class="rules">
+        <li>Say what Laya did, in plain words: "Laya chose", "read by laya/english", "63% on topic".</li>
+        <li>Solid borders mark what is chosen; dashed borders mark what is available.</li>
+        <li>Motion is feedback: the enso draws while waiting, rows fade in, meters fill. Nothing moves for decoration.</li>
+        <li>Links stay blue and purple. Everything else is ink.</li>
+      </ul>
+      <ul class="rules">
+        <li class="no">No brand colour, gradient or glow. No pink: that is Jev Search.</li>
+        <li class="no">No watercolor texture behind text or inside controls.</li>
+        <li class="no">No mono type as decoration; it is Laya's voice only.</li>
+        <li class="no">No buzzwords or em dashes in copy. Short sentences, simple English.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+</body>
+</html>

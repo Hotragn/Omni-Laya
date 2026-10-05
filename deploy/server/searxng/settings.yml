@@ -1,0 +1,27 @@
+# SearXNG for OmniLaya: JSON output on, and the engines OmniLaya asks for switched on.
+# Everything else keeps SearXNG's defaults.
+use_default_settings: true
+
+general:
+  instance_name: "OmniLaya search backend"
+
+server:
+  # Overwritten by the SEARXNG_SECRET environment variable.
+  secret_key: "set-by-environment"
+  limiter: false
+  public_instance: false
+  image_proxy: false
+
+search:
+  safe_search: 0
+  formats:
+    - html
+    - json
+
+engines:
+  - name: google
+    disabled: false
+  - name: hackernews
+    disabled: false
+  - name: sogou wechat
+    disabled: false

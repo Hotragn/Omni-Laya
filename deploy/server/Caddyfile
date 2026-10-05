@@ -1,0 +1,16 @@
+# Caddy gets a Let's Encrypt certificate for each host on its own; no account or domain needed
+# when the hosts are sslip.io names, which resolve to the IP written in them.
+
+# laya-serve checks LAYA_API_KEY itself.
+{$LAYA_HOST} {
+	reverse_proxy laya:8000
+}
+
+# SearXNG has no authentication, so the key is checked here.
+{$SEARCH_HOST} {
+	@authorized header Authorization "Bearer {$SEARCH_KEY}"
+	handle @authorized {
+		reverse_proxy searxng:8080
+	}
+	respond "unauthorized" 401
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4eee3" />
+    <title>OmniLaya Search</title>
+    <style>
+      :root { color-scheme: light; background: #f4eee3; color: #1b1a17; }
+      :root.dark { color-scheme: dark; background: #15140f; color: #ece5d6; }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        font: 16px/1.5 system-ui, sans-serif;
+      }
+      main { max-width: 22rem; padding: 1.5rem; text-align: center; }
+      h1 { margin: 0; font: 500 1.6rem/1.2 Georgia, serif; }
+      img { display: block; margin: 0 auto 1rem; }
+      :root.dark img { filter: invert(0.92); }
+      p { margin: 0.75rem 0 0; color: #6b665c; }
+      :root.dark p { color: #a8a092; }
+      a { color: #1d44a8; }
+      :root.dark a { color: #8ab4f8; }
+    </style>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let theme;
+        try { theme = localStorage.getItem('omnilaya-theme'); } catch {}
+        const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        root.classList.toggle('dark', dark);
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = dark ? '#15140f' : '#f4eee3';
+      })();
+    </script>
+  </head>
+  <body>
+    <main>
+      <img src="/mark-flat.svg" width="56" height="56" alt="" />
+      <h1>OmniLaya Search</h1>
+      <p>Search needs a network connection.</p>
+      <p><a href="/">Try again</a></p>
+    </main>
+  </body>
+</html>

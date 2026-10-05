@@ -1,0 +1,17 @@
+# Copy to .dev.vars for local development.
+# Search backend: search1api (default) or searxng, a free self-hosted one (see DEPLOY.md).
+SEARCH_PROVIDER=search1api
+SEARCH1API_API_KEY=
+SEARXNG_BASE_URL=
+SEARXNG_API_KEY=
+# Enabled Laya providers in order of preference: laya, huggingface. Unlisted providers stay
+# off; extra listed ones are fallbacks when the first is unreachable or answers 429 or 5xx.
+# Empty means laya.
+LAYA_PROVIDERS=laya
+# A laya-serve you run yourself: pip install "laya[serve]" && laya-serve
+LAYA_BASE_URL=http://127.0.0.1:8000
+# Only when that laya-serve sets LAYA_API_KEY.
+LAYA_API_KEY=
+# A Hugging Face Inference Endpoint running the laya-serve container.
+HF_ENDPOINT_URL=
+HF_TOKEN=

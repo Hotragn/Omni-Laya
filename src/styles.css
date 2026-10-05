@@ -1,0 +1,276 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * OmniLaya: the Proofreader's Desk. Cream paper and black ink; the one red,
+ * the seal, marks only what Laya decided. Links stay ink blue and plum so
+ * results read as links. DESIGN.md holds the reasons.
+ */
+:root {
+  color-scheme: light;
+  --radius: 0.875rem;
+  --background: #f4eee3;
+  --foreground: #1b1a17;
+  --card: #fbf8f2;
+  --card-foreground: #1b1a17;
+  --popover: #fbf8f2;
+  --popover-foreground: #1b1a17;
+  --primary: #1b1a17;
+  --primary-text: #3a372f;
+  --primary-foreground: #f4eee3;
+  --secondary: #e7dfcf;
+  --secondary-foreground: #1b1a17;
+  --muted: #e7dfcf;
+  --muted-foreground: #635f57;
+  --accent: #e7dfcf;
+  --accent-foreground: #1b1a17;
+  --destructive: #b3261e;
+  --border: #ddd3c2;
+  --input: #cfc4b1;
+  --ring: #1b1a17;
+  --link: #2b3a8c;
+  --visited: #6b2f6b;
+  --seal: #b8321c;
+  --seal-soft: color-mix(in oklch, #b8321c 12%, transparent);
+  --fold: #e7dfcf;
+  --ok: #2f6b3a;
+  --warn: #8a5a12;
+  --wash: #1b1a17;
+  --grain-opacity: 0.05;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #15140f;
+  --foreground: #ece5d6;
+  --card: #1d1b16;
+  --card-foreground: #ece5d6;
+  --popover: #1d1b16;
+  --popover-foreground: #ece5d6;
+  --primary: #ece5d6;
+  --primary-text: #d9d1c3;
+  --primary-foreground: #15140f;
+  --secondary: #221f18;
+  --secondary-foreground: #ece5d6;
+  --muted: #221f18;
+  --muted-foreground: #a39c8e;
+  --accent: #221f18;
+  --accent-foreground: #ece5d6;
+  --destructive: #f2877e;
+  --border: #34312a;
+  --input: #45413a;
+  --ring: #ece5d6;
+  --link: #9ba8f0;
+  --visited: #c995c9;
+  --seal: #e4573d;
+  --seal-soft: color-mix(in oklch, #e4573d 16%, transparent);
+  --fold: #221f18;
+  --ok: #8fc79a;
+  --warn: #e2b46b;
+  --wash: #ece5d6;
+  --grain-opacity: 0.035;
+}
+
+@theme inline {
+  /* Every Tailwind transition eases like ink settling, not the browser default. */
+  --default-transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  --default-transition-duration: 180ms;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Recursive', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--primary-text);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-visited: var(--visited);
+  --color-seal: var(--seal);
+  --color-seal-soft: var(--seal-soft);
+  --color-fold: var(--fold);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* clip, not hidden: the home wash is wider than a phone, and clip adds no scroll container, so sticky still works. */
+    overflow-x: clip;
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    position: relative;
+  }
+  /* Paper grain: one small tile, fixed behind everything, never behind text at a level that hurts contrast. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .dark body::before {
+    filter: invert(1);
+  }
+  ::selection { background: color-mix(in oklch, var(--seal) 18%, transparent); }
+  :root { caret-color: var(--foreground); accent-color: var(--seal); }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  a { text-underline-offset: 3px; }
+  /* Interface icons are drawn with a fine pen: 1.5 instead of the icon set's 2. */
+  svg[stroke-width="2"] { stroke-width: 1.5; }
+  /* Solid ink buttons press in slightly, like a key. */
+  button.bg-primary:not(:disabled):active { transform: scale(0.97); }
+  button.bg-primary { transition: opacity 180ms var(--ease-out, ease-out), transform 160ms var(--ease-out, ease-out); }
+  kbd {
+    font-family: var(--font-mono);
+    font-variation-settings: 'MONO' 1, 'CASL' 0.6;
+    font-size: 0.72rem;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 0 0.35rem;
+    background: var(--card);
+    color: var(--foreground);
+  }
+}
+
+/* The display voice: Shippori Mincho, for the wordmark and headings only, never body text. */
+.display {
+  font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', Georgia, serif;
+  font-weight: 700;
+}
+
+/* Laya's voice: Recursive with the mono and casual axes, for scores, choices and timings. */
+.readout {
+  font-family: var(--font-mono);
+  font-variation-settings: 'MONO' 1, 'CASL' 0.6;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The printed page: result titles, snippets and the decision sentence. */
+.print {
+  font-family: var(--font-serif);
+}
+
+/* ---- motion ---------------------------------------------------------- */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-fast: 160ms;
+  --dur: 220ms;
+  --dur-focal: 320ms;
+}
+
+/* The search box and wordmark keep their identity across the home to results
+   navigation: the browser morphs them instead of swapping pages. */
+.vt-searchbox { view-transition-name: searchbox; }
+.vt-wordmark { view-transition-name: wordmark; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: var(--dur); }
+::view-transition-old(searchbox),
+::view-transition-new(searchbox),
+::view-transition-old(wordmark),
+::view-transition-new(wordmark) {
+  animation-duration: var(--dur-focal);
+  animation-timing-function: var(--ease-out);
+}
+::view-transition-old(searchbox),
+::view-transition-old(wordmark) { animation-name: none; opacity: 0; }
+
+/* A result group arriving: a plain fade. Transition (not keyframes) so a
+   re-render can retarget it; @starting-style supplies the from-state. */
+.enter {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease-out);
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/* The working block folding to its one-line summary: height and opacity
+   together, interruptible (a transition, not keyframes). */
+.fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows var(--dur-focal) var(--ease-in-out), opacity var(--dur) var(--ease-out);
+}
+.fold[data-open] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.fold > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Chips: state changes are colour, not movement. */
+.chip {
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+.chip:active { transform: scale(0.97); }
+
+/* Waiting: the enso draws itself, then starts again. Feedback, not decoration. */
+.enso-draw {
+  stroke-dasharray: 100;
+  animation: enso-draw 1.6s var(--ease-in-out) infinite;
+}
+@keyframes enso-draw {
+  0% { stroke-dashoffset: 100; opacity: 1; }
+  70% { stroke-dashoffset: 12; opacity: 1; }
+  100% { stroke-dashoffset: 12; opacity: 0.25; }
+}
+
+/* Relevance: an ink bar that fills to the score as the row is judged. */
+.meter > span {
+  transition: width var(--dur-focal) var(--ease-out);
+}
+
+/* The one authored moment: a margin mark is written in as its score arrives.
+   The bar draws left to right and the number fades in. */
+.mark-in .tick > span {
+  animation: mark-draw 300ms var(--ease-out) both;
+  transform-origin: left center;
+}
+.mark-in .mark-num {
+  animation: mark-fade 300ms var(--ease-out) both;
+}
+@keyframes mark-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes mark-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Hand stamps: the only things on the page that rotate. */
+.stamp { transform: rotate(-2deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .enter { transition-duration: 120ms; }
+  .fold { transition-duration: 120ms; }
+  .enso-draw { animation: none; stroke-dashoffset: 12; }
+  .meter > span { transition: none; }
+  .mark-in .tick > span, .mark-in .mark-num { animation: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: 120ms; animation-name: none; }
+}

@@ -1,0 +1,40 @@
+# OmniLaya backend: Laya, SearXNG and Caddy for HTTPS. setup.sh writes .env and starts this.
+#   docker compose up -d --build
+services:
+  laya:
+    build: ./laya
+    restart: unless-stopped
+    environment:
+      LAYA_API_KEY: ${LAYA_API_KEY:?run setup.sh to create .env}
+      # Keep at or below the machine's cores; Oracle's free ARM server has 2.
+      LAYA_THREADS: ${LAYA_THREADS:-2}
+      LAYA_MODELS: ${LAYA_MODELS:-english,multilingual}
+    volumes:
+      - models:/models
+
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    environment:
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?run setup.sh to create .env}
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [laya, searxng]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      LAYA_HOST: ${LAYA_HOST:?run setup.sh to create .env}
+      SEARCH_HOST: ${SEARCH_HOST:?run setup.sh to create .env}
+      SEARCH_KEY: ${SEARCH_KEY:?run setup.sh to create .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+
+volumes:
+  models:
+  caddy-data:

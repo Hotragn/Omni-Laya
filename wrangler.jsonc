@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "omnilaya-search",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2026-07-17",
+  "compatibility_flags": ["nodejs_compat"],
+  // Deploys to <name>.<your-subdomain>.workers.dev. Add a "routes" entry to serve a custom domain.
+  "workers_dev": true,
+  "vars": {
+    "SEARCH1API_BASE_URL": "https://api.search1api.com",
+    // Empty lets laya-serve route each request to the English or multilingual checkpoint.
+    // Set english, multilingual or typed-decisions to pin one.
+    "LAYA_MODEL": ""
+  },
+  // Secrets are uploaded per deployment with `wrangler secret put` and listed in .dev.vars.example,
+  // which also drives type generation. Only SEARCH1API_API_KEY and the settings of your primary
+  // Laya provider are needed; there is no `secrets.required` because Wrangler would then refuse
+  // to deploy without the optional ones.
+  //   LAYA_PROVIDERS   enabled Laya providers in order of preference; default "laya".
+  //                    Unlisted providers stay off even when their settings exist; the first
+  //                    configured one is primary, the rest are fallbacks when it is unreachable
+  //                    or answers HTTP 429 or 5xx. Example: "laya,huggingface".
+  //   LAYA_BASE_URL    laya: base URL of your laya-serve, e.g. https://laya.example.com
+  //   LAYA_API_KEY     laya: bearer key, only if that server sets LAYA_API_KEY
+  //   HF_ENDPOINT_URL  huggingface: Inference Endpoint URL running the laya-serve container
+  //   HF_TOKEN         huggingface: Hugging Face token with access to that endpoint
+  "ratelimits": [{
+    "name": "SEARCH_RATE_LIMIT",
+    "namespace_id": "2026092401",
+    "simple": { "limit": 10, "period": 60 }
+  }],
+  // Create a namespace with `wrangler kv namespace create omnilaya-search-cache` and put its ID here.
+  "kv_namespaces": [{ "binding": "CACHE", "id": "replace-with-your-kv-namespace-id" }],
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "invocation_logs": true }
+  }
+}
