@@ -3,31 +3,60 @@
 <head>
 <meta charset="utf-8">
 <title>OmniLaya share image</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Literata:opsz,wght@7..72,400;7..72,500&family=Hanken+Grotesk:wght@400;500&family=Recursive:wght,CASL,MONO@400..600,0..1,0..1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Literata:opsz,wght@7..72,400;7..72,500&family=Hanken+Grotesk:wght@400;500;600&family=Recursive:wght,CASL,MONO@400..600,0..1,0..1&display=swap">
 <style>
-  /* Rendered at 1200x630 into public/og-home.png. Colours and faces from DESIGN.md. */
+  /*
+   * Rendered at 1200x630 into public/og-home.png (and local/public/og-home.png),
+   * then centred on 1280x640 paper for brand/github/social-preview.png.
+   * Colours and faces from DESIGN.md: seal red only on what Laya decided.
+   */
   html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #f4eee3; color: #1b1a17; font-family: 'Hanken Grotesk', sans-serif; }
-  .wash { position: absolute; left: 50%; top: 50%; width: 1300px; transform: translate(-50%, -50%); opacity: 0.1; }
-  .wrap { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  h1 { margin: 20px 0 0; font: 700 86px/1 'Shippori Mincho', Georgia, serif; letter-spacing: -0.02em; }
-  h1 span { font-weight: 500; color: #635f57; }
-  .sentence { margin: 30px 0 0; font: 400 34px/1.4 Literata, Georgia, serif; }
-  .pick { border-bottom: 3px solid #b8321c; padding: 0 2px; }
-  .mark { margin-top: 26px; display: flex; gap: 28px; align-items: center; font: 22px Recursive, monospace; font-variation-settings: 'MONO' 1, 'CASL' 0.6; color: #b8321c; }
-  .tick { width: 120px; height: 6px; border-radius: 3px; background: rgba(184, 50, 28, 0.14); overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 12px; }
-  .tick i { display: block; width: 91%; height: 100%; background: #b8321c; }
-  .stamp { border: 2px solid #b8321c; border-radius: 6px; padding: 2px 10px; transform: rotate(-2deg); }
-  .foot { position: absolute; bottom: 30px; font: 17px Recursive, monospace; font-variation-settings: 'MONO' 1, 'CASL' 0.6; color: #635f57; }
+  .wash { position: absolute; left: 62%; top: 52%; width: 1100px; transform: translate(-50%, -50%); opacity: 0.09; }
+  .wrap { position: relative; height: 100%; box-sizing: border-box; padding: 54px 72px 0; }
+  .brand { display: flex; align-items: center; gap: 14px; font: 700 34px/1 'Shippori Mincho', Georgia, serif; letter-spacing: -0.015em; }
+  .brand span { font-weight: 500; color: #635f57; }
+  h1 { margin: 34px 0 0; font: 700 76px/1.02 'Shippori Mincho', Georgia, serif; letter-spacing: -0.025em; }
+  .sub { margin: 16px 0 0; font: 400 24px/1.4 Literata, Georgia, serif; color: rgba(27, 26, 23, 0.8); }
+  .page { margin-top: 36px; width: 1000px; }
+  .query { display: flex; align-items: center; gap: 14px; height: 54px; padding: 0 18px; border: 1px solid #d3cabb; border-radius: 14px; background: #fbf8f2; font-size: 21px; color: #1b1a17; }
+  .query svg { flex: none; }
+  .sentence { margin: 18px 0 0; font: 400 25px/1.4 Literata, Georgia, serif; }
+  .pick { border-bottom: 3px solid #b8321c; padding: 0 1px; }
+  .row { margin-top: 20px; display: grid; grid-template-columns: 1fr 230px; gap: 26px; align-items: start; }
+  .meta { font-size: 15px; color: #635f57; }
+  .title { margin-top: 3px; font: 400 22px/1.3 Literata, Georgia, serif; color: #23408e; }
+  .margin { border-left: 1px solid rgba(184, 50, 28, 0.3); padding: 2px 0 0 16px; font: 18px Recursive, monospace; font-variation-settings: 'MONO' 1, 'CASL' 0.6; color: #b8321c; }
+  .tick { margin-top: 7px; width: 110px; height: 5px; border-radius: 3px; background: rgba(184, 50, 28, 0.14); overflow: hidden; }
+  .tick i { display: block; width: 97%; height: 100%; background: #b8321c; }
+  .stamp { display: inline-block; margin-top: 10px; border: 2px solid #b8321c; border-radius: 5px; padding: 1px 8px; transform: rotate(-2.5deg); font-size: 16px; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 26px; display: flex; justify-content: space-between; font: 16px Recursive, monospace; font-variation-settings: 'MONO' 1, 'CASL' 0.6; color: #635f57; }
 </style>
 </head>
 <body>
   <img class="wash" src="../public/wash.webp" alt="">
   <div class="wrap">
-    <img src="logo/mark-wash.svg" width="104" height="104" alt="">
-    <h1>OmniLaya <span>Search</span></h1>
-    <p class="sentence">Laya searched <span class="pick">Hacker News</span> from <span class="pick">the past month</span>.</p>
-    <div class="mark"><span>91 on topic<span class="tick"><i></i></span></span><span class="stamp">official: yes 96</span></div>
-    <div class="foot">open source · scores you can see and correct · no generated answers</div>
+    <div class="brand"><img src="logo/mark-wash.svg" width="46" height="46" alt="">OmniLaya <span>Search</span></div>
+    <h1>Links, not answers.</h1>
+    <p class="sub">Ask in plain words. A model in your browser picks where to look and ranks every link.</p>
+    <div class="page">
+      <div class="query">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#635f57" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        How do I debounce a function in JavaScript?
+      </div>
+      <p class="sentence">Laya searched <span class="pick">the open web</span>, <span class="pick">Stack Overflow</span> and <span class="pick">npm</span> from <span class="pick">any time</span>.</p>
+      <div class="row">
+        <div>
+          <div class="meta">Stack Overflow · stackoverflow.com · answered</div>
+          <div class="title">Can someone explain the "debounce" function in JavaScript?</div>
+        </div>
+        <div class="margin">
+          <div>97 on topic</div>
+          <div class="tick"><i></i></div>
+          <span class="stamp">answered: yes 94</span>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="foot"><span>runs in your browser · no account · no tracking · block any site</span><span>free and open source</span></div>
 </body>
 </html>

@@ -89,6 +89,11 @@ export function About() {
             request, picks where to look, and scores every result on your own device. It never writes an answer for you: you get the
             results, with each score shown in the margin.
           </p>
+          <p className="print mt-3 text-[17px] leading-7 text-foreground/85">
+            Why it exists: many search pages and chat tools now put a generated answer first. When you need the actual page (the docs,
+            the repo, the package, the thread), you still have to dig for the link and check whether it is real. OmniLaya skips the
+            answer and gives you the links, from places developers already use, with no account and nothing tracked.
+          </p>
         </div>
 
         <Section id="how" title="What happens when you search">

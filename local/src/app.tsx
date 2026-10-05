@@ -83,15 +83,19 @@ function SearchForm({ initial, compact, onSearch }: { initial: string; compact?:
 }
 
 const EXAMPLES = [
-  'Rust async runtimes on Hacker News this month',
   'How do I debounce a function in JavaScript?',
+  'A maintained date library for TypeScript',
+  'Rust async runtimes on Hacker News this month',
   'New papers on speculative decoding',
 ];
 
+// Written from what people ask of search in 2025 and 2026: "just give me the links", block sites
+// they do not trust, and no account or tracking. See README, "Why OmniLaya".
 const PROMISES = [
-  ['Runs on your device', 'Laya, the model that reads your request and ranks the results, runs in this tab. There is no OmniLaya server.'],
-  ['Every score in the open', 'Each result shows how sure Laya is, and you can strike a place, move the cutoff, or mark Laya wrong.'],
-  ['Free, no account', 'Keyless open sources: an open web index, Wikipedia, Hacker News, GitHub, Stack Overflow, OpenAlex, Open Library and npm.'],
+  ['Just the links', 'No AI answer on top, so there is nothing made up to check. You get the docs, repos, threads, packages and papers, and judge them yourself.'],
+  ['The right places, picked for you', 'Ask in plain words. Laya decides where to look: the open web, GitHub, npm, Stack Overflow, Hacker News, papers, books or Wikipedia. Every package and repo shown is a real entry.'],
+  ['You set the rules', 'Block, raise or lower any site. Hide results below a score you choose. Ask a yes or no question, like "Is this official documentation?", and every result gets an answer.'],
+  ['No account, no tracking, free', 'Laya runs in this tab, and your search goes straight to those sources with no OmniLaya server in between. Open source, so anyone can host a copy.'],
 ] as const;
 
 export function App() {
@@ -144,7 +148,7 @@ export function App() {
       document.title = `${params.q} · OmniLaya Search`;
     } else {
       robots?.remove();
-      document.title = 'OmniLaya Search: search that runs on your device';
+      document.title = 'OmniLaya Search: links, not answers';
     }
   }, [params.q]);
 
@@ -285,7 +289,7 @@ export function App() {
           OmniLaya <span className="font-medium text-muted-foreground">Search</span>
         </h1>
         <p className="mt-3 max-w-md text-balance text-center text-[15px] text-muted-foreground sm:text-base">
-          Search that runs on your device. No server, no account, every score in the open.
+          Links, not answers. Ask in plain words, and a model on your device picks where to look and ranks every link.
         </p>
         <div className="mt-8 w-full">
           <SearchForm initial="" onSearch={(q) => go({ q })} />
@@ -302,7 +306,7 @@ export function App() {
         <div className="mt-10 w-full">
           <LayaCard fastGpu={fastGpu} onLoad={() => laya.load()} onRemove={removeLaya} status={status} />
         </div>
-        <dl className="mt-12 grid w-full gap-5 border-t-[3px] border-double border-border pt-6 text-sm sm:grid-cols-3">
+        <dl className="mt-12 grid w-full gap-x-8 gap-y-6 border-t-[3px] border-double border-border pt-6 text-sm sm:grid-cols-2">
           {PROMISES.map(([title, body]) => (
             <div key={title}>
               <dt className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">{title}</dt>
@@ -310,6 +314,13 @@ export function App() {
             </div>
           ))}
         </dl>
+        <p className="mt-8 w-full border-t border-dashed border-border pt-4 text-[13px] text-muted-foreground">
+          Good to know: it works best in a desktop browser with WebGPU, and the first visit downloads Laya once (614 MB). The open web
+          index it uses is small, so it is better at finding developer sources than at general web search. It cannot search Reddit or X.{' '}
+          <a className="underline underline-offset-2 hover:text-foreground" href="about">
+            More on how it works
+          </a>
+        </p>
         <p className="readout mt-10 text-center text-muted-foreground">
           Judgment by{' '}
           <a className="underline underline-offset-2" href="https://huggingface.co/convaiinnovations/laya" rel="noreferrer" target="_blank">

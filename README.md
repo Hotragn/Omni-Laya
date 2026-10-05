@@ -1,14 +1,29 @@
 # OmniLaya Search
 
-[![OmniLaya Search homepage](public/og-home.png)](https://omnilaya.pages.dev/)
+**Links, not answers.** Ask in plain words, and a small model running in your browser picks where to look and ranks every link. No AI answer, no account, no tracking.
 
-**Try it in your browser: [omnilaya.pages.dev](https://omnilaya.pages.dev/)** · [How it works and privacy](https://omnilaya.pages.dev/about)
+[![OmniLaya Search: links, not answers](public/og-home.png)](https://omnilaya.pages.dev/)
 
-Search the web in plain language. [Laya](https://github.com/NandhaKishorM/laya), a small non-autoregressive decision model from Convai Innovations, chooses where to search and how recent the results should be, then scores every result that comes back through [Search1API](https://www.search1api.com). You get links and snippets with visible relevance scores and editable filters. No generated answers.
+**Try it: [omnilaya.pages.dev](https://omnilaya.pages.dev/)** · [How it works and privacy](https://omnilaya.pages.dev/about)
 
-Laya answers typed questions (`choice`, `score`, `noul`) about a piece of text in one forward pass and never writes text, so every decision on the page is a probability you can see. OmniLaya runs Laya through its own HTTP server, `laya-serve`, which you host.
+## Why OmniLaya
 
-OmniLaya Search is a port of [Jev Search](https://github.com/superagents-lab/jev-search) (MIT) from TypeSafe's Jev to Laya. It is an independent project, not an official Convai Innovations or Search1API product.
+Search pages and chat tools now put a generated answer first. When you need the actual page (the docs, the repo, the package, the thread), you still dig for the link and check whether it is real. In Pew's 2025 study, people clicked a search result on 8% of visits when Google showed an AI summary, against 15% without one, and clicked a link inside the summary on 1% ([Pew Research](https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/)). For code it is riskier: a 2024 study found that at least 5.2% of packages suggested by commercial code models, and 21.7% by open-source ones, did not exist ([Spracklen et al.](https://arxiv.org/abs/2406.10279)).
+
+What people keep asking for in developer forums is simple: "just give me the links", let me block sites I do not trust, and do not make me sign up or pay. That is what OmniLaya does:
+
+- **Just the links.** No generated answer, so there is nothing made up to check. You read the sources and judge them yourself.
+- **The right places, picked for you.** Laya reads your request and decides where to look: the open web, GitHub, npm, Stack Overflow, Hacker News, research papers, books or Wikipedia. A package or repo in the results is a real entry from that registry.
+- **You set the rules.** Block, raise or lower any site. Hide results below a score you choose. Ask a yes or no question ("Is this official documentation?") and every result is stamped with Laya's answer.
+- **Private and free.** Laya runs in your browser tab and your search goes straight to the sources. There is no OmniLaya server, account or analytics. It is a static site under the MIT license, so anyone can host a copy.
+
+**What it does not do well yet:** the open web index ([Mwmbl](https://mwmbl.org)) is small, so OmniLaya is better at finding developer sources than at general web search, and it is not a Google replacement. Reddit, X and arXiv do not allow searches from a browser. The first visit downloads Laya once (614 MB), and it is fast only with WebGPU, so a desktop browser works best.
+
+## About the model
+
+[Laya](https://github.com/NandhaKishorM/laya) is a small non-autoregressive decision model from Convai Innovations. It answers typed questions (`choice`, `score`, `noul`) about a piece of text in one forward pass and never writes text, so every decision on the page is a probability you can see.
+
+OmniLaya Search started as a port of [Jev Search](https://github.com/superagents-lab/jev-search) (MIT) from TypeSafe's Jev to Laya. It is an independent project, not an official Convai Innovations or Search1API product.
 
 ## Two ways to run it
 
@@ -35,7 +50,7 @@ Measured on a Snapdragon laptop (Adreno GPU, Chrome): reading a request 0.2 to 0
 
 To publish: `pnpm deploy:local` builds `dist-local/` and uploads it to the Cloudflare Pages project `omnilaya` (log in once with `npx wrangler login`). Any other static host works too: serve `dist-local/` and set `SITE_URL` to its address when building, so share links and the sitemap point at it.
 
-## How it works
+## How the server app works
 
 1. **Understand.** Laya answers two choice questions about your request in one call: how recent the results should be, and where to search (the open web, Hacker News, Reddit, GitHub, X, arXiv, Wikipedia, IMDb, WeChat or YouTube). Each place Laya gives at least 35% of its choice is searched. As on Jev Search, a platform the request names ("on Hacker News", "Reddit users") is searched on its own, and a platform Laya infers without a name ("new papers" means arXiv) is searched together with the three web engines. When no place stands out, the web engines answer. The page writes this as one sentence ("Laya searched Google, DuckDuckGo and Yandex from any time."); tap a place to strike it out, a struck place to bring it back, or the time to change it.
 2. **Search.** Google, DuckDuckGo and Yandex search the open web. Hacker News, Reddit and GitHub each combine a Google site-restricted search with their own engine. X, arXiv, YouTube, Wikipedia, IMDb and WeChat use vertical engines. Calls run concurrently; one failed engine does not discard another engine's results.
