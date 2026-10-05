@@ -18,7 +18,7 @@
 <p align="center">
   <a href="https://omnilaya.pages.dev/"><img src="https://img.shields.io/badge/try_it-omnilaya.pages.dev-b8321c" alt="Try it at omnilaya.pages.dev"></a>
   <a href="https://github.com/Hotragn/Omni-Laya/actions/workflows/ci.yml"><img src="https://github.com/Hotragn/Omni-Laya/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Hotragn/Omni-Laya?color=1b1a17" alt="MIT license"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1b1a17" alt="MIT license"></a>
   <img src="https://img.shields.io/badge/runs_on-WebGPU-1b1a17" alt="Runs on WebGPU">
   <a href="https://github.com/Hotragn/Omni-Laya/stargazers"><img src="https://img.shields.io/github/stars/Hotragn/Omni-Laya?style=social" alt="GitHub stars"></a>
 </p>
