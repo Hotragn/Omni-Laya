@@ -127,7 +127,7 @@ Without WebGPU fp16, Laya falls back to the CPU and a 1.3 GB download, which wor
 
 ### How good is it?
 
-On 133 live results across six yes or no questions, Ask Laya separated yes from no with an AUC of 0.75 (70% right at the 0.5 line). That is useful for sorting, not a verdict: it still says yes sometimes when the answer is no. Laya is used zero-shot, without training for search, and every prompt choice was measured rather than guessed. The method and harness are in [docs/SERVER.md](docs/SERVER.md#why-the-questions-look-the-way-they-do) and `local/src/dev/ask-eval.ts`.
+On 133 live results across six yes or no questions, Ask Laya separated yes from no with an AUC of 0.75 (70% right at the 0.5 line). That is useful for sorting, not a verdict: it still says yes sometimes when the answer is no. Questions that only ask what kind of result something is ("Is this an npm package?", "Is this a research paper?", "Is this a GitHub repo?") skip the model, because the link already answers them, and the page says so. Laya is used zero-shot, without training for search, and every prompt choice was measured rather than guessed. The method and harness are in [docs/SERVER.md](docs/SERVER.md#why-the-questions-look-the-way-they-do) and `local/src/dev/ask-eval.ts`.
 
 ## How it compares
 

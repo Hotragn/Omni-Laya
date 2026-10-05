@@ -9,6 +9,8 @@ export interface AskLayaState {
   answers: Record<string, number>;
   ms: number | null;
   message: string | null;
+  /** Set when the answers came from where each result came from, not from Laya. */
+  by?: 'rule' | 'laya';
 }
 
 /** Results asked about per question: the ones above the cutting floor, best first. */

@@ -114,10 +114,10 @@ export function useLocalAsk(request: string, judge: Judge) {
       const started = performance.now();
       setState((s) => ({ status: 'asking', question: q, answers: s.question === q ? s.answers : {}, ms: null, message: null }));
       try {
-        await askRows(request, q, rows, judge, (answers) => {
+        const { by } = await askRows(request, q, rows, judge, (answers) => {
           if (run.current === mine) setState((s) => ({ ...s, answers: { ...s.answers, ...answers } }));
         });
-        if (run.current === mine) setState((s) => ({ ...s, status: 'done', ms: Math.round(performance.now() - started) }));
+        if (run.current === mine) setState((s) => ({ ...s, status: 'done', by, ms: Math.round(performance.now() - started) }));
       } catch (error) {
         if (run.current === mine) setState((s) => ({ ...s, status: 'error', message: error instanceof Error ? error.message : String(error) }));
       }

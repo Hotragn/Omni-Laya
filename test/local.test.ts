@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   askRows,
   keywords,
+  kindRule,
   mergeHits,
   orderRows,
   pickPlaces,
@@ -93,12 +94,45 @@ describe('asking about rows', () => {
       web: [{ id: 'web:1', place: 'web', url: 'https://blog.example/debounce', title: 'Debounce explained', snippet: 'How it works', position: 1 }],
     });
     const got: Record<string, number> = {};
-    await askRows('debounce', 'Is this an npm package?', rows, judge, (a) => Object.assign(got, a));
+    await askRows('debounce', 'Is this official documentation?', rows, judge, (a) => Object.assign(got, a));
     expect(seen[0]).toEqual({
       state: 'Title: Debounce explained\nSnippet: From the open web, blog.example. How it works',
-      question: { type: 'noul', instructions: 'Is this an npm package?' },
+      question: { type: 'noul', instructions: 'Is this official documentation?' },
     });
     expect(got).toEqual({ 'web:1': 0.2, 'packages:1': 0.9 });
+  });
+});
+
+describe('kind-of-result questions', () => {
+  const rows = mergeHits({
+    packages: [{ id: 'packages:1', place: 'packages', url: 'https://www.npmjs.com/package/debounce', title: 'debounce', snippet: '', position: 1 }],
+    web: [
+      { id: 'web:1', place: 'web', url: 'https://www.30secondsofcode.org/js/s/debounce-function', title: 'Debounce', snippet: '', position: 1 },
+      { id: 'web:2', place: 'web', url: 'https://github.com/component/debounce', title: 'component/debounce', snippet: '', position: 2 },
+    ],
+  });
+
+  it('answers by rule when the question only asks what kind of result it is', () => {
+    const yesFor = (rule: (r: (typeof rows)[number]) => boolean) => rows.filter(rule).map((r) => r.id);
+    expect(yesFor(kindRule('Is this an npm package?')!)).toEqual(['packages:1']);
+    expect(yesFor(kindRule('is this a GitHub repo')!)).toEqual(['web:2']);
+    expect(kindRule('Is this a research paper?')).not.toBeNull();
+    expect(kindRule('Is this a question someone asked on a forum?')).not.toBeNull();
+  });
+
+  it('leaves questions with a condition to Laya', () => {
+    expect(kindRule('Is this a maintained npm package?')).toBeNull();
+    expect(kindRule('Is this official documentation?')).toBeNull();
+    expect(kindRule('Does this use TypeScript?')).toBeNull();
+  });
+
+  it('skips the model for rule answers', async () => {
+    const judge: Judge = { ready: true, decide: async () => [], decideMany: vi.fn(async () => []) };
+    const got: Record<string, number> = {};
+    const { by } = await askRows('debounce', 'Is this an npm package?', rows, judge, (a) => Object.assign(got, a));
+    expect(by).toBe('rule');
+    expect(judge.decideMany).not.toHaveBeenCalled();
+    expect(got).toEqual({ 'packages:1': 0.99, 'web:1': 0.01, 'web:2': 0.01 });
   });
 });
 

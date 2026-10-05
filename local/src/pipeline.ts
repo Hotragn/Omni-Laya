@@ -10,7 +10,7 @@
  *    uses (the result in the question, the request as the state).
  */
 import { candidateRoles, mentionsTime } from '@/lib/candidates';
-import { readerAsk, readerState, relevanceQuestion } from '@/lib/laya';
+import { hostOf, readerAsk, readerState, relevanceQuestion } from '@/lib/laya';
 import { canonicalUrl } from '@/lib/rank';
 import { DEFAULT_WINDOW, PLACE_PICK, WINDOWS, type WindowId } from '@/lib/sources';
 import type { Question } from './laya/runtime';
@@ -179,13 +179,51 @@ export function rowState(row: Row): string {
 }
 
 /** The reader's own yes/no question about the rows: each row is the state (see readerState in src/lib/laya.ts). */
+/**
+ * Questions that only ask what kind of result something is ("Is this an npm
+ * package?") have an answer in the link itself, so they skip the model. Laya,
+ * used zero-shot, said yes to blog posts for that question; the source never
+ * does. Anything with an extra condition ("a maintained npm package") still
+ * goes to Laya.
+ */
+const pathOf = (url: string) => {
+  try {
+    return new URL(url).pathname.split('/').filter(Boolean);
+  } catch {
+    return [];
+  }
+};
+const KINDS: { ask: RegExp; is: (r: Row) => boolean }[] = [
+  { ask: /^(npm|node) (package|module|library)$|^(package|module|library) (on|from) npm$/, is: (r) => /^npmjs\.(com|org)$/.test(hostOf(r.url) ?? '') && pathOf(r.url)[0] === 'package' },
+  { ask: /^((code|github|git) )?(repo|repository)( on github)?$|^github (project|repo|repository)$/, is: (r) => hostOf(r.url) === 'github.com' && pathOf(r.url).length === 2 },
+  { ask: /^((research|academic|scientific) )?(paper|article in a journal)$/, is: (r) => r.places.includes('papers') || /^(arxiv\.org|doi\.org|openalex\.org)$/.test(hostOf(r.url) ?? '') },
+  { ask: /^stack overflow (question|answer|post|thread)$|^question (someone|somebody) asked( on a forum)?$/, is: (r) => hostOf(r.url) === 'stackoverflow.com' && pathOf(r.url)[0] === 'questions' },
+  { ask: /^book$/, is: (r) => r.places.includes('books') || hostOf(r.url) === 'openlibrary.org' },
+  { ask: /^(wikipedia (article|page)|encyclopedia (article|entry))$/, is: (r) => /(^|\.)wikipedia\.org$/.test(hostOf(r.url) ?? '') && pathOf(r.url)[0] === 'wiki' },
+  { ask: /^(hacker news|hn) (thread|discussion|post|story)$/, is: (r) => hostOf(r.url) === 'news.ycombinator.com' },
+];
+
+/** The rule that answers a kind-of-result question, or null when it needs Laya. */
+export function kindRule(question: string): ((r: Row) => boolean) | null {
+  const m = /^(?:is|are) (?:this|it|these) (?:an? |the )?(.+?)\s*\??$/i.exec(question.trim().replace(/\s+/g, ' '));
+  if (!m) return null;
+  const kind = m[1]!.toLowerCase();
+  return KINDS.find((k) => k.ask.test(kind))?.is ?? null;
+}
+
+/** Answers the reader's question for each row; says whether a rule answered instead of Laya. */
 export async function askRows(
   _request: string,
   question: string,
   rows: Row[],
   judge: Judge,
   onAnswers: (answers: Record<string, number>) => void
-): Promise<void> {
+): Promise<{ by: 'rule' | 'laya' }> {
+  const rule = kindRule(question);
+  if (rule) {
+    onAnswers(Object.fromEntries(rows.map((r) => [r.id, rule(r) ? 0.99 : 0.01])));
+    return { by: 'rule' };
+  }
   const ask = readerAsk(question);
   await judge.decideMany(rows.map((r) => ({ state: rowState(r), question: ask })), (from, part) => {
     const answers: Record<string, number> = {};
@@ -194,4 +232,5 @@ export async function askRows(
     });
     onAnswers(answers);
   });
+  return { by: 'laya' };
 }

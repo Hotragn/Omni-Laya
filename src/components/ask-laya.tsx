@@ -116,7 +116,10 @@ export function AskLaya({
             </button>
           ))}
           <span className="readout text-muted-foreground">
-            “{state.question}”{state.ms !== null && ` · answered in ${(state.ms / 1000).toFixed(1)} s`}
+            “{state.question}”
+            {state.by === 'rule'
+              ? ' · answered from where each result came from, no model needed'
+              : state.ms !== null && ` · answered in ${(state.ms / 1000).toFixed(1)} s`}
           </span>
         </div>
       )}
