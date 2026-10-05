@@ -92,7 +92,7 @@ No API keys, no model server, no environment file.
 SITE_URL=https://search.example.com/ pnpm build:local   # static site in dist-local/
 ```
 
-Upload `dist-local/` to any static host. `SITE_URL` makes share cards, the canonical link and the sitemap point at your address. To publish to Cloudflare Pages, as the official site does, run `pnpm deploy:local` after `npx wrangler login`.
+Upload `dist-local/` to any static host. `SITE_URL` makes share cards, the canonical link and the sitemap point at your address. To publish to Cloudflare Pages, as the official site does, run `pnpm deploy:local` after `npx wrangler login`. The official site also deploys on every push to `main` through `.github/workflows/deploy.yml`, using the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets.
 
 ## How it works
 
