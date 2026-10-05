@@ -150,6 +150,17 @@ describe('browser sources', () => {
     expect(abstractText({ world: [1], hello: [0] })).toBe('hello world');
   });
 
+  it('cleans README markup out of npm descriptions', async () => {
+    stub({
+      objects: [
+        { package: { name: 'perfect-debounce', description: '<!-- automd:badges color=yellow -->', keywords: ['debounce', 'promise'] } },
+        { package: { name: 'debounce-fn', description: 'Debounce a <b>function</b>' } },
+      ],
+    });
+    const rows = await placeById('packages').search('debounce', 'any', signal);
+    expect(rows.map((r) => r.snippet)).toEqual(['debounce, promise', 'Debounce a function']);
+  });
+
   it('drops rows without a usable link', async () => {
     stub({ docs: [{ key: '/works/OL1W', title: 'Rust in Action', author_name: ['Tim McNamara'], first_publish_year: 2021 }, { key: '', title: '' }] });
     const rows = await placeById('books').search('rust', 'any', signal);

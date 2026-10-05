@@ -74,7 +74,7 @@ type OaWork = {
   abstract_inverted_index?: Record<string, number[]> | null;
 };
 type OlDoc = { key: string; title: string; author_name?: string[]; first_publish_year?: number };
-type NpmObj = { package: { name: string; description?: string; date?: string; links?: { npm?: string } } };
+type NpmObj = { package: { name: string; description?: string; keywords?: string[]; date?: string; links?: { npm?: string } } };
 
 /** OpenAlex stores abstracts as word -> positions; rebuild the first words. */
 export function abstractText(index: Record<string, number[]> | null | undefined, words = 45): string {
@@ -238,7 +238,8 @@ export const PLACES: readonly Place[] = [
       return hits('packages', objects.map((o) => ({
         url: o.package.links?.npm ?? `https://www.npmjs.com/package/${o.package.name}`,
         title: o.package.name,
-        snippet: o.package.description ?? '',
+        // Some descriptions are README markup (badge comments, tags); keywords stand in when nothing is left.
+        snippet: strip(o.package.description ?? '') || (o.package.keywords ?? []).slice(0, 8).join(', '),
         ...(o.package.date ? { date: o.package.date } : {}),
       })));
     },
