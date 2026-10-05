@@ -47,7 +47,8 @@ const WHO_SEES = [
     'The keywords and your IP address, sent by your browser straight to each one: Mwmbl (the open web index), Wikipedia, the Hacker News search by Algolia, GitHub, Stack Exchange, OpenAlex, Open Library and npm. Each has its own privacy policy.',
   ],
   ['Hugging Face', 'Your IP address, once, when your browser downloads Laya.'],
-  ['GitHub Pages', 'Your IP address and the page address you open, which holds the search when you open a search link. GitHub hosts these files.'],
+  ['jsDelivr', 'Your IP address, when your browser fetches the ONNX Runtime engine that runs Laya.'],
+  ['Cloudflare Pages', 'Your IP address and the page address you open, which holds the search when you open a search link. Cloudflare hosts these files.'],
   ['Google Fonts', 'Your IP address, when your browser fetches the four typefaces.'],
   ['OmniLaya', 'Nothing. There is no OmniLaya server, no analytics, no cookies and no account.'],
 ] as const;

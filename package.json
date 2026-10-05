@@ -16,7 +16,8 @@
     "deploy": "pnpm run build && wrangler deploy",
     "deploy:free": "node scripts/deploy-cloudflare.mjs",
     "dev:local": "vite --config vite.local.config.ts",
-    "build:local": "vite build --config vite.local.config.ts"
+    "build:local": "vite build --config vite.local.config.ts",
+    "deploy:local": "vite build --config vite.local.config.ts && wrangler pages deploy dist-local --project-name omnilaya --branch main"
   },
   "dependencies": {
     "@huggingface/transformers": "4.3.0",

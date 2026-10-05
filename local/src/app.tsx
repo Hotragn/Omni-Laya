@@ -320,7 +320,7 @@ export function App() {
             open-jev
           </a>{' '}
           · no generated answers ·{' '}
-          <a className="underline underline-offset-2" href="about.html">
+          <a className="underline underline-offset-2" href="about">
             about and privacy
           </a>
         </p>
@@ -437,7 +437,7 @@ export function App() {
                   </p>
                   <p className="readout mt-1 text-muted-foreground">
                     nothing you typed went to an OmniLaya server ·{' '}
-                    <a className="underline underline-offset-2 hover:text-foreground" href="about.html#privacy">
+                    <a className="underline underline-offset-2 hover:text-foreground" href="about#privacy">
                       who sees what
                     </a>
                   </p>

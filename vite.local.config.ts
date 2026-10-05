@@ -4,11 +4,11 @@ import viteReact from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 
 /**
- * The public address, with a trailing slash. CI passes the one GitHub Pages
- * reports, so a custom domain or a move to another account needs no edit here.
+ * The public address, with a trailing slash. Set SITE_URL when the site moves
+ * (a custom domain, another host); share tags and the sitemap follow it.
  */
-const SITE_URL = (process.env.SITE_URL || 'https://hotragn.github.io/Omni-Laya/').replace(/\/?$/, '/');
-const PAGES = ['', 'about.html'];
+const SITE_URL = (process.env.SITE_URL || 'https://omnilaya.pages.dev/').replace(/\/?$/, '/');
+const PAGES = ['', 'about'];
 
 /**
  * Fills %SITE_URL% in the HTML (share cards and canonical links need absolute
@@ -18,7 +18,11 @@ function siteFiles(): Plugin {
   return {
     name: 'omnilaya-site-files',
     transformIndexHtml: (html) => html.replaceAll('%SITE_URL%', SITE_URL),
-    generateBundle() {
+    generateBundle(_, bundle) {
+      // onnxruntime-web references its 26.9 MB wasm by URL, so Vite copies it in. transformers.js
+      // loads that file from jsDelivr at the exact onnxruntime-web version instead, and Cloudflare
+      // Pages refuses files over 25 MiB, so the unused copy is left out.
+      for (const name of Object.keys(bundle)) if (name.endsWith('.wasm')) delete bundle[name];
       const emit = (fileName: string, source: string) => this.emitFile({ type: 'asset', fileName, source });
       emit('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`);
       emit(
@@ -58,7 +62,7 @@ function siteFiles(): Plugin {
 
 /**
  * OmniLaya, the static build: everything runs in the reader's browser, so the
- * output in dist-local/ can be served by any static host (GitHub Pages, a
+ * output in dist-local/ can be served by any static host (Cloudflare Pages, a
  * USB stick behind `npx serve`). `base: './'` keeps it working under a subpath.
  */
 export default defineConfig({

@@ -1,6 +1,8 @@
 # OmniLaya Search
 
-[![OmniLaya Search homepage](public/og-home.png)](https://github.com/Hotragn/Omni-Laya)
+[![OmniLaya Search homepage](public/og-home.png)](https://omnilaya.pages.dev/)
+
+**Try it in your browser: [omnilaya.pages.dev](https://omnilaya.pages.dev/)** · [How it works and privacy](https://omnilaya.pages.dev/about)
 
 Search the web in plain language. [Laya](https://github.com/NandhaKishorM/laya), a small non-autoregressive decision model from Convai Innovations, chooses where to search and how recent the results should be, then scores every result that comes back through [Search1API](https://www.search1api.com). You get links and snippets with visible relevance scores and editable filters. No generated answers.
 
@@ -14,7 +16,7 @@ OmniLaya Search is a port of [Jev Search](https://github.com/superagents-lab/jev
 | --- | --- | --- |
 | Where Laya runs | In the reader's browser (WebGPU), downloaded once (614 MB) | On a `laya-serve` you host |
 | Search sources | Keyless open APIs, called from the browser | Search1API or SearXNG |
-| Hosting | Any static host; GitHub Pages workflow included | Cloudflare Workers plus a Laya server |
+| Hosting | Any static host; live on Cloudflare Pages | Cloudflare Workers plus a Laya server |
 | Cost | Free | Free to a few dollars, see [DEPLOY.md](DEPLOY.md) |
 | Privacy | Requests go only to the sources; there is no OmniLaya server | Requests pass through your Worker and Laya server |
 
@@ -31,7 +33,7 @@ pnpm build:local   # static files in dist-local/
 
 Measured on a Snapdragon laptop (Adreno GPU, Chrome): reading a request 0.2 to 0.4 s, judging 8 to 16 results 0.8 to 1.3 s, a full page 1.7 to 3 s; reopening the tab to judged results 8 s from cache. Browsers without WebGPU fp16 fall back to the CPU and a 1.3 GB fp32 download, which is slow. Reddit, arXiv and X refuse browser requests, so the static app cannot search them.
 
-To publish: enable GitHub Pages (Settings, Pages, Source: GitHub Actions) and push; `.github/workflows/pages.yml` builds and deploys `dist-local/`.
+To publish: `pnpm deploy:local` builds `dist-local/` and uploads it to the Cloudflare Pages project `omnilaya` (log in once with `npx wrangler login`). Any other static host works too: serve `dist-local/` and set `SITE_URL` to its address when building, so share links and the sitemap point at it.
 
 ## How it works
 
