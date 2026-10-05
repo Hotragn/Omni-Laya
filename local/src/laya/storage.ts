@@ -4,6 +4,7 @@
  * keeps them and a later visit loads from disk. These helpers report that
  * copy, ask the browser not to evict it, and remove it on request.
  */
+import { MODEL_ID, MODEL_REVISION } from './model';
 
 /** The Cache Storage bucket transformers.js writes to (its `cacheKey` default). */
 export const MODEL_CACHE = 'transformers-cache';
@@ -61,4 +62,26 @@ export async function removeStored(): Promise<void> {
     /* storage blocked */
   }
   if ('caches' in globalThis) await caches.delete(MODEL_CACHE);
+}
+
+/**
+ * Deletes files cached for any other revision of the model, such as copies from
+ * before the revision was pinned, so a pin change does not leave a second
+ * 600 MB copy behind. Returns how many entries went.
+ */
+export async function dropStale(): Promise<number> {
+  try {
+    if (!('caches' in globalThis) || !(await caches.has(MODEL_CACHE))) return 0;
+    const cache = await caches.open(MODEL_CACHE);
+    let dropped = 0;
+    for (const request of await cache.keys()) {
+      if (request.url.includes(MODEL_ID) && !request.url.includes(MODEL_REVISION)) {
+        await cache.delete(request);
+        dropped++;
+      }
+    }
+    return dropped;
+  } catch {
+    return 0;
+  }
 }

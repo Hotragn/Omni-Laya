@@ -1,9 +1,21 @@
 import { useEffect, useState } from 'react';
 import type { LayaStatus } from '../laya/client';
-import { keepStored, stored, type Stored } from '../laya/storage';
+import { dropStale, keepStored, stored, type Stored } from '../laya/storage';
 import { cn } from '@/lib/utils';
 
 const MB = 1024 * 1024;
+
+/**
+ * A warning for devices that may not hold Laya. `navigator.deviceMemory` is
+ * Chromium only and rounded (0.25 to 8 GB); elsewhere only the CPU path warns.
+ */
+export function memoryWarning(fastGpu: boolean | null, deviceMemory: number | undefined): string | null {
+  if (deviceMemory !== undefined && deviceMemory < 4) {
+    return `This device reports ${deviceMemory} GB of memory. Laya needs more than ${fastGpu === false ? '2' : '1'} GB free while it loads, so the tab may close. Searches work without it.`;
+  }
+  if (fastGpu === false) return 'This browser has no WebGPU with fp16, so Laya would run on the CPU: larger and slower.';
+  return null;
+}
 
 /**
  * Where Laya lives. Until the reader brings it here, searches still work by
@@ -26,6 +38,7 @@ export function LayaCard({
   compact?: boolean;
 }) {
   const size = fastGpu === false ? '1.3 GB' : '614 MB';
+  const warning = memoryWarning(fastGpu, (navigator as Navigator & { deviceMemory?: number }).deviceMemory);
 
   if (status.phase === 'ready') {
     return (
@@ -68,9 +81,7 @@ export function LayaCard({
       >
         Bring Laya to this device ({size}, once)
       </button>
-      {fastGpu === false && (
-        <p className="readout mt-2 text-muted-foreground">This browser has no WebGPU with fp16, so Laya would run on the CPU: larger and slower.</p>
-      )}
+      {warning && <p className="readout mt-2 text-muted-foreground">{warning}</p>}
     </div>
   );
 }
@@ -87,6 +98,7 @@ export function StoredLine({ onRemove }: { onRemove: () => Promise<void> }) {
     let live = true;
     // Asking to persist first means the line reports the browser's answer, not the state before it.
     void keepStored()
+      .then(dropStale)
       .then(stored)
       .then((s) => live && setInfo(s));
     return () => {

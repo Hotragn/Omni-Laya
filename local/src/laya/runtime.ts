@@ -15,8 +15,9 @@
 import { AutoModel, AutoTokenizer, Tensor, env } from '@huggingface/transformers';
 import type { PreTrainedTokenizer } from '@huggingface/transformers';
 import { hasFp16WebGpu } from './gpu';
+import { MODEL_ID, MODEL_REVISION } from './model';
 
-export const MODEL_ID = 'onnx-community/laya-multilingual-ONNX';
+export { MODEL_ID, MODEL_REVISION };
 
 export type Question =
   | { type: 'noul'; instructions: string; descriptions?: { true?: string; false?: string } }
@@ -85,7 +86,7 @@ export class LayaRuntime {
     env.allowLocalModels = false;
     env.useBrowserCache = true;
 
-    const config = (await (await fetch(`https://huggingface.co/${MODEL_ID}/resolve/main/config.json`)).json()) as {
+    const config = (await (await fetch(`https://huggingface.co/${MODEL_ID}/resolve/${MODEL_REVISION}/config.json`)).json()) as {
       laya?: LayaSection;
     };
     const section = config.laya ?? {};
@@ -112,8 +113,9 @@ export class LayaRuntime {
       onProgress?.({ loaded, total, file: p.file });
     };
 
-    runtime.tokenizer = await AutoTokenizer.from_pretrained(MODEL_ID, { progress_callback });
+    runtime.tokenizer = await AutoTokenizer.from_pretrained(MODEL_ID, { revision: MODEL_REVISION, progress_callback });
     runtime.model = (await AutoModel.from_pretrained(MODEL_ID, {
+      revision: MODEL_REVISION,
       dtype: runtime.dtype,
       device: runtime.device,
       progress_callback,

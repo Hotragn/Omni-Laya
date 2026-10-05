@@ -7,14 +7,13 @@ import { ruleFor, toJsonl, type Disagreement, type DomainRule } from '@/lib/proo
 import { isWindowId, type WindowId } from '@/lib/sources';
 import { useProofs } from '@/lib/use-proofs';
 import { cn } from '@/lib/utils';
-import markUrl from '../../public/mark.svg?url';
-import markNightUrl from '../../public/mark-night.svg?url';
 import { hasFp16WebGpu } from './laya/gpu';
 import { laya, type LayaStatus } from './laya/client';
 import { orderRows, type Row } from './pipeline';
 import { PLACES, placeById, type PlaceId } from './sources';
-import { CACHED_FLAG, keepStored, removeStored } from './laya/storage';
+import { CACHED_FLAG, dropStale, keepStored, removeStored } from './laya/storage';
 import { LayaCard, StoredLine } from './ui/laya-card';
+import { Mark } from './ui/mark';
 import { Results } from './ui/results';
 import { Sentence } from './ui/sentence';
 import { useLocalAsk, useSearch } from './use-search';
@@ -42,15 +41,6 @@ function writeParams(p: Params, replace = false) {
   const url = `${location.pathname}${s.size ? `?${s}` : ''}`;
   if (replace) history.replaceState(null, '', url);
   else history.pushState(null, '', url);
-}
-
-function Mark({ className }: { className?: string }) {
-  return (
-    <span aria-hidden className={cn('relative inline-block shrink-0', className)}>
-      <img alt="" className="size-full dark:hidden" src={markUrl} />
-      <img alt="" className="hidden size-full dark:block" src={markNightUrl} />
-    </span>
-  );
 }
 
 function SearchForm({ initial, compact, onSearch }: { initial: string; compact?: boolean; onSearch: (q: string) => void }) {
@@ -135,12 +125,28 @@ export function App() {
       /* fine */
     }
     void keepStored();
+    void dropStale();
   }, [status.phase]);
 
   const removeLaya = useCallback(async () => {
     laya.unload();
     await removeStored();
   }, []);
+
+  // Result pages are one HTML file with a query string: keep them out of search
+  // indexes and give each tab a title that says what it holds.
+  useEffect(() => {
+    let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (params.q) {
+      robots ??= Object.assign(document.createElement('meta'), { name: 'robots' });
+      robots.content = 'noindex';
+      document.head.appendChild(robots);
+      document.title = `${params.q} · OmniLaya Search`;
+    } else {
+      robots?.remove();
+      document.title = 'OmniLaya Search: search that runs on your device';
+    }
+  }, [params.q]);
 
   const go = useCallback((next: Params, replace = false) => {
     writeParams(next, replace);
@@ -313,7 +319,10 @@ export function App() {
           <a className="underline underline-offset-2" href="https://github.com/shreyaskarnik/open-jev" rel="noreferrer" target="_blank">
             open-jev
           </a>{' '}
-          · no generated answers
+          · no generated answers ·{' '}
+          <a className="underline underline-offset-2" href="about.html">
+            about and privacy
+          </a>
         </p>
       </main>
     );
@@ -426,7 +435,12 @@ export function App() {
                       ? `Laya multilingual, on this device (${status.device === 'webgpu' ? 'GPU' : 'CPU'}, ${status.dtype}).`
                       : 'Rules in this page; Laya is not on this device.'}
                   </p>
-                  <p className="readout mt-1 text-muted-foreground">nothing you typed went to an OmniLaya server</p>
+                  <p className="readout mt-1 text-muted-foreground">
+                    nothing you typed went to an OmniLaya server ·{' '}
+                    <a className="underline underline-offset-2 hover:text-foreground" href="about.html#privacy">
+                      who sees what
+                    </a>
+                  </p>
                   {status.phase === 'ready' && (
                     <div className="readout text-muted-foreground">
                       <StoredLine onRemove={removeLaya} />

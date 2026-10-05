@@ -4,49 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f4eee3" />
-    <title>OmniLaya Search: search that runs on your device</title>
+    <title>About OmniLaya Search: what runs where, what is stored, credits</title>
     <meta
       name="description"
-      content="Open-source web search where Laya, a small decision model, runs in your browser to pick the sources and rank every result. No server, no account, no generated answers."
+      content="How OmniLaya Search works: Laya runs in your browser, which sources see your search, what is stored on your device and how to remove it, and who made the parts."
     />
-    <link rel="canonical" href="%SITE_URL%" />
+    <link rel="canonical" href="%SITE_URL%about.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="OmniLaya Search" />
-    <meta property="og:url" content="%SITE_URL%" />
-    <meta property="og:title" content="OmniLaya Search: search that runs on your device" />
+    <meta property="og:url" content="%SITE_URL%about.html" />
+    <meta property="og:title" content="About OmniLaya Search" />
     <meta property="og:description" content="Laya picks where to search and ranks every result in your browser. Every score in the open." />
     <meta property="og:image" content="%SITE_URL%og-home.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="OmniLaya Search wordmark under an ink enso, with the line: Laya searched Hacker News from the past month, and a score of 91 on topic." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="OmniLaya Search: search that runs on your device" />
+    <meta name="twitter:title" content="About OmniLaya Search" />
     <meta name="twitter:description" content="Laya picks where to search and ranks every result in your browser. Every score in the open." />
     <meta name="twitter:image" content="%SITE_URL%og-home.png" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "OmniLaya Search",
-        "url": "%SITE_URL%",
-        "description": "Open-source web search where Laya, a small decision model, runs in your browser to pick the sources and rank every result.",
-        "applicationCategory": "SearchApplication",
-        "operatingSystem": "Any browser with WebGPU, or any modern browser on the CPU",
-        "browserRequirements": "Requires JavaScript. WebGPU recommended.",
-        "isAccessibleForFree": true,
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "license": "https://opensource.org/licenses/MIT",
-        "codeRepository": "https://github.com/Hotragn/Omni-Laya",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "%SITE_URL%?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -68,6 +47,6 @@
   <body class="min-h-dvh">
     <div id="root"></div>
     <noscript>OmniLaya runs Laya in your browser, so it needs JavaScript.</noscript>
-    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="./src/about-main.tsx"></script>
   </body>
 </html>

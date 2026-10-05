@@ -12,7 +12,9 @@ import {
   type Judge,
 } from '../local/src/pipeline';
 import { PLACES, abstractText, placeById, type Hit } from '../local/src/sources';
-import { CACHED_FLAG, MODEL_CACHE, keepStored, removeStored, stored } from '../local/src/laya/storage';
+import { CACHED_FLAG, MODEL_CACHE, dropStale, keepStored, removeStored, stored } from '../local/src/laya/storage';
+import { MODEL_ID, MODEL_REVISION } from '../local/src/laya/model';
+import { memoryWarning } from '../local/src/ui/laya-card';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -215,5 +217,33 @@ describe('Laya stored on the device', () => {
     expect(deleted).toEqual([MODEL_CACHE]);
     expect(flags.has(CACHED_FLAG)).toBe(false);
     expect(await stored()).toMatchObject({ bytes: 0 });
+  });
+});
+
+describe('pinned model and device warnings', () => {
+  it('drops cached files from other model revisions only', async () => {
+    const urls = [
+      `https://huggingface.co/${MODEL_ID}/resolve/main/onnx/model_fp16.onnx_data`,
+      `https://hotragn.github.io/${MODEL_ID}/${MODEL_REVISION}/onnx/model_fp16.onnx_data`,
+      'https://cdn.example/other-model/file.bin',
+    ];
+    const kept = new Set(urls);
+    vi.stubGlobal('caches', {
+      has: async () => true,
+      open: async () => ({
+        keys: async () => [...kept].map((u) => new Request(u)),
+        delete: async (r: Request) => kept.delete(r.url),
+      }),
+    });
+    expect(await dropStale()).toBe(1);
+    expect([...kept]).toEqual(urls.slice(1));
+  });
+
+  it('warns on low memory, and on the CPU path', () => {
+    expect(memoryWarning(true, 2)).toMatch(/reports 2 GB of memory.*more than 1 GB/);
+    expect(memoryWarning(false, 2)).toMatch(/more than 2 GB/);
+    expect(memoryWarning(false, 8)).toMatch(/no WebGPU/);
+    expect(memoryWarning(true, 8)).toBeNull();
+    expect(memoryWarning(true, undefined)).toBeNull();
   });
 });

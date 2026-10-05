@@ -30,7 +30,12 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
+      # Pages reports the live address (custom domain included); the build bakes it into share tags and the sitemap.
+      - id: pages
+        uses: actions/configure-pages@v5
       - run: pnpm build:local
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-local
